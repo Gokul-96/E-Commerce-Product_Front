@@ -28,8 +28,7 @@ const ProductList = () => {
               alt={product.name}
               className="w-full h-48 object-cover mb-4"
             />
-            <h3 className="font-semibold">{product.name}</h3>
-            <p>${product.price}</p>
+            <h3 className="font-semibold">{product.title}</h3>
             <Link to={`/product/${product._id}`} className="text-blue-600 hover:underline mt-4 block">
               View Details
             </Link>

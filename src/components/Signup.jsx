@@ -1,88 +1,46 @@
-import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; 
-const SignUpPage = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const emailRef = useRef(null);
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
+const SignUp = () => {
+  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+  const { signup } = useAuth();
   const navigate = useNavigate();
-  useEffect(() => {
-    emailRef.current.focus();
-  }, []);
 
-  const handleSignUp = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (password !== confirmPassword) {
-      alert("Passwords don't match");
-      return;
-    }
-
     try {
-      const response = await axios.post('http://localhost:8000/api/users/signup', {
-       name,
-        email,
-        password,
-      });
-
-      if (response.data.token) {
-        alert('User registered successfully!');
-        localStorage.setItem('userToken', response.data.token);
-        navigate('/login');
-      }
-    } catch (err) {
-      if (err.response) {
-        setErrorMessage(err.response.data.message);  
-      } else {
-        setErrorMessage('Error during sign-up. Please try again.');
-      }
-      console.error('Error during sign-up:', err.response ? err.response.data : err.message);
+      await signup(formData);
+      navigate('/login'); // Redirect to login after successful signup
+    } catch (error) {
+      console.error('Signup failed:', error.message);
+      alert('Signup failed. Please try again.');
     }
   };
 
   return (
-    <div className="max-w-sm mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
-      <form onSubmit={handleSignUp}>
+    <form onSubmit={handleSubmit}>
       <input
-          type="text"
-          placeholder="Name"
-          className="w-full p-2 mb-4 border border-gray-300 rounded"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          ref={emailRef}
-          type="email"
-          placeholder="Email"
-          className="w-full p-2 mb-4 border border-gray-300 rounded"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full p-2 mb-4 border border-gray-300 rounded"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Confirm Password"
-          className="w-full p-2 mb-4 border border-gray-300 rounded"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-        <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded">
-          Sign Up
-        </button>
-      </form>
-    </div>
+        type="text"
+        placeholder="Name"
+        value={formData.name}
+        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+      />
+      <input
+        type="email"
+        placeholder="Email"
+        value={formData.email}
+        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={formData.password}
+        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+      />
+      <button type="submit">Sign Up</button>
+    </form>
   );
 };
 
-export default SignUpPage;
+export default SignUp;
