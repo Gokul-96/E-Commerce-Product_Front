@@ -1,22 +1,28 @@
 // src/components/LoginPage.jsx
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-
+import { useNavigate } from 'react-router-dom';
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const emailRef = useRef(null); // Create ref for email input.
-
+  const [errorMessage, setErrorMessage] = useState('');
+  const emailRef = useRef(null); 
+  const navigate = useNavigate()
   useEffect(() => {
-    emailRef.current.focus(); // Focus on email input when the component mounts.
+    emailRef.current.focus(); 
   }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:8000/api/users/login', { email, password });
-      localStorage.setItem('token', response.data.token); // Store token
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token); // Store token
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        navigate('/'); 
+      }
     } catch (err) {
+      setErrorMessage('Login failed. Please check your credentials.');
       console.error('Login failed', err);
     }
   };
@@ -26,7 +32,7 @@ const LoginPage = () => {
       <h2 className="text-2xl font-bold mb-4">Login</h2>
       <form onSubmit={handleLogin}>
         <input
-          ref={emailRef} // Set the focus here
+          ref={emailRef}
           type="email"
           placeholder="Email"
           className="w-full p-2 mb-4 border border-gray-300 rounded"
