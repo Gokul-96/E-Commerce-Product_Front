@@ -14,7 +14,7 @@ const LoginPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/api/auth/login', { email, password });
+      const response = await axios.post('http://localhost:8000/api/users/login', { email, password });
       localStorage.setItem('token', response.data.token); // Store token
     } catch (err) {
       console.error('Login failed', err);

@@ -1,4 +1,3 @@
-// src/components/Home.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import ProductList from './ProductList'; 
@@ -7,7 +6,7 @@ const Home = () => {
   return (
     <div>
       <header className="bg-blue-500 text-white p-4">
-        <h1 className="text-3xl">Welcome to Our E-Commerce Store!</h1>
+        <h1 className="text-3xl">Welcome to Our E-Commerce Store!!!</h1>
         <nav>
           <ul className="flex space-x-4 mt-4">
             <li>
