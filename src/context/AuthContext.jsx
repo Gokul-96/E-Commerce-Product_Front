@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (userData) => {
     try {
-      const response = await fetch('http://localhost:8000/api/users/login', {
+      const response = await fetch('https://e-commerce-product-back.onrender.com/api/users/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData),
