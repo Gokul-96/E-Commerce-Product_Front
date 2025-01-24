@@ -1,31 +1,29 @@
 // src/App.jsx
-import React from 'react';
+import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
-import Navbar from './components/Navbar';
-import ProductList from './components/ProductList';
-import ProductDetail from './pages/ProductDetails';
-import CartPage from './pages/CartPage';
-import Home from './pages/Home';
-import { AuthProvider } from './context/AuthContext'; 
-import Login from './components/Login';
-import Register from './components/Register';
+const Home = React.lazy(() => import('./components/Home'));
+const ProductList = React.lazy(() => import('./components/ProductList'));
+const ProductDetail = React.lazy(() => import('./components/ProductDetail'));
+const Cart = React.lazy(() => import('./components/Cart'));
+const Login = React.lazy(() => import('./components/Login'));
+const SignUp = React.lazy(() => import('./components/SignUp'));
+
 const App = () => {
   return (
     <CartProvider>
-         <AuthProvider>
       <Router>
-        <Navbar />
-        <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-          <Route path="/products" element={<ProductList />} />
-          <Route path="/product/:id" element={<ProductDetail />} />
-          <Route path="/cart" element={<CartPage />} />
-        </Routes>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Routes>
+          <Route path="/" element={<Home />}/>
+            <Route path="/products" element={<ProductList />} />
+            <Route path="/product/:id" element={<ProductDetail />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/login" element={<Login/>} />
+            <Route path="/signup" element={<SignUp />} /> 
+          </Routes>
+        </Suspense>
       </Router>
-      </AuthProvider>
     </CartProvider>
   );
 };

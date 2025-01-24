@@ -1,49 +1,51 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+// src/components/LoginPage.jsx
+import React, { useState, useRef, useEffect } from 'react';
+import axios from 'axios';
 
-const Login = () => {
+const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login } = useAuth();
-  const navigate = useNavigate();
+  const emailRef = useRef(null); // Create ref for email input.
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    emailRef.current.focus(); // Focus on email input when the component mounts.
+  }, []);
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    
-    const userData = { email };
-    login(userData);
-
-    // Redirect to home page after login
-    navigate('/');
+    try {
+      const response = await axios.post('http://localhost:8000/api/auth/login', { email, password });
+      localStorage.setItem('token', response.data.token); // Store token
+    } catch (err) {
+      console.error('Login failed', err);
+    }
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Login</button>
+    <div className="max-w-sm mx-auto p-4">
+      <h2 className="text-2xl font-bold mb-4">Login</h2>
+      <form onSubmit={handleLogin}>
+        <input
+          ref={emailRef} // Set the focus here
+          type="email"
+          placeholder="Email"
+          className="w-full p-2 mb-4 border border-gray-300 rounded"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          className="w-full p-2 mb-4 border border-gray-300 rounded"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded">
+          Login
+        </button>
       </form>
     </div>
   );
 };
 
-export default Login;
+export default LoginPage;
