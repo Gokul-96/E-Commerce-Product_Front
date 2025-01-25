@@ -9,7 +9,7 @@ const ProductList = React.lazy(() => import('./components/ProductList'));
 const ProductDetail = React.lazy(() => import('./components/ProductDetail'));
 const Cart = React.lazy(() => import('./components/Cart'));
 const Login = React.lazy(() => import('./components/Login'));
-const SignUp = React.lazy(() => import('./components/SignUp'));
+const SignUp = React.lazy(() => import('./components/Signup'));
 const Header = React.lazy(() => import('./components/Header'));
 const Profile = React.lazy(() => import('./components/Profile'));  
 
