@@ -20,6 +20,8 @@ npm run dev to run the application
 
 Application running in http://localhost:5173/
 
+Deployment Link : https://glistening-starlight-1787c7.netlify.app/
+
 
 
 

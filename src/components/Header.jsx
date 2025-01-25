@@ -32,9 +32,9 @@ const Header = () => {
             {/* Conditional Rendering Based on Authentication */}
             {isAuthenticated() ? (
               <>
-                <Nav.Link as={Link} to="/profile" className="nav-link-custom">
+                {/* <Nav.Link as={Link} to="/profile" className="nav-link-custom">
                   Profile
-                </Nav.Link>
+                </Nav.Link> */}
                 <Button variant="danger" onClick={logout}>
                   Logout
                 </Button>
