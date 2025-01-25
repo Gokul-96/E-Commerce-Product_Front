@@ -10,48 +10,50 @@ export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
   const addToCart = (product) => {
-    console.log('Adding product to cart:', product);  // Log the product being added
     setCart((prevCart) => {
-      console.log('Current Cart:', prevCart);  // Log the current state of the cart
       const existingProductIndex = prevCart.findIndex(item => item._id === product._id);
-      console.log('Existing Product Index:', existingProductIndex);  // Log the index of the existing product
-  
       if (existingProductIndex > -1) {
-        // If product exists, update the quantity
         const updatedCart = [...prevCart];
         updatedCart[existingProductIndex].quantity += 1;
-        console.log('Updated Cart (after increment):', updatedCart);  // Log the updated cart
         return updatedCart;
       } else {
-        // If product doesn't exist, add it with quantity 1
-        const newCart = [...prevCart, { ...product, quantity: 1 }];
-        console.log('New Cart (after addition):', newCart);  // Log the new cart
-        return newCart;
+        return [...prevCart, { ...product, quantity: 1 }];
       }
     });
   };
-  
-  
-  
 
-  // Remove a product from the cart by its ID
+  const updateCartItemQuantity = (productId, quantity) => {
+    setCart((prevCart) => {
+      return prevCart.map((item) =>
+        item._id === productId
+          ? { ...item, quantity: Math.max(1, quantity) } // Ensure quantity is at least 1
+          : item
+      );
+    });
+  };
+
   const removeFromCart = (productId) => {
     setCart((prevCart) => prevCart.filter((item) => item._id !== productId));
   };
 
-  // Clear all products from the cart
   const clearCart = () => {
     setCart([]);
   };
 
-  // Get the total price of the items in the cart
   const getCartTotal = () => {
     return cart.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, clearCart, getCartTotal }}
+      value={{
+        cart,
+        addToCart,
+        removeFromCart,
+        clearCart,
+        getCartTotal,
+        updateCartItemQuantity, // Add this to the context
+      }}
     >
       {children}
     </CartContext.Provider>
