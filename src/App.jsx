@@ -11,7 +11,7 @@ const Cart = React.lazy(() => import('./components/Cart'));
 const Login = React.lazy(() => import('./components/Login'));
 const SignUp = React.lazy(() => import('./components/SignUp'));
 const Header = React.lazy(() => import('./components/Header'));
-const Profile = React.lazy(() => import('./components/Profile'));  // Import Profile component
+const Profile = React.lazy(() => import('./components/Profile'));  
 
 const App = () => {
   const { isAuthenticated, logout } = useAuth();
